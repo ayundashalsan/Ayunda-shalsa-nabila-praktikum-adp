@@ -1,0 +1,18 @@
+# Menghitung Probabilitas Poisson
+
+# Nilai eksponensial
+e = 2.71828  
+λt = float(input("Masukkan λt: "))  # Rata-rata kejadian dalam interval waktu
+n = int(input("Masukkan n: "))  # Jumlah kejadian yang ingin dihitung
+faktorial = 1
+if n > 0:
+    for i in range(1, n + 1):
+        faktorial = faktorial * i
+
+# Menggunakan rumus Poisson
+P_n = (e ** (-λt)) * (λt ** n) / faktorial  
+print("Hasil Perhitungan Probabilitas Poisson:")
+print("n    P(N)")
+print("----------------------------")
+print(n, "  ", P_n)
+
