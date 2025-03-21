@@ -1,0 +1,21 @@
+# Nilai eksponensial
+e = 2.71828  
+λt = float(input("Masukkan nilai λt: "))  
+M = int(input("Masukkan batas M: "))  
+
+print("\nHasil Perhitungan Probabilitas Poisson:")
+print("n    P(N)")
+print("----------------------------")
+
+for n in range(M + 1):  
+    faktorial = 1  
+
+    # Jika n > 0, hitung faktorial dari n!
+    if n > 0:
+        for i in range(1, n + 1):
+            faktorial *= i  
+
+    # Hitung probabilitas Poisson
+    P_n = (e ** (-λt)) * (λt ** n) / faktorial  
+    # Cetak hasil
+    print(n, "  ", P_n)
