@@ -1,0 +1,109 @@
+print("Selamat datang di sistem reservasi tiket konser!\n")
+
+# Ukuran kursi
+baris = 16  # 2 baris(VVIP) + 3 baris(VIP) + 10 baris(Reguler) + 1 baris(Ekonomi)
+kolom = 5
+
+total_kursi = baris * kolom
+
+# Harga kategori
+harga_vvip = 1000000
+harga_vip = 750000
+harga_reguler = 500000
+harga_ekonomi = 250000
+
+# layout kursi awal
+nomor = 1
+for i in range(1, baris + 1):  
+    for j in range(1, kolom + 1):  
+        print(f"{nomor:2}", end=" ")
+        nomor += 1
+    print()
+
+# Harga tiket
+print("\nHarga Tiket")
+print(f"VVIP: Rp{harga_vvip:,}")
+print(f"VIP: Rp{harga_vip:,}")
+print(f"Reguler: Rp{harga_reguler:,}")
+print(f"Ekonomi: Rp{harga_ekonomi:,}")
+
+kursi_dipesan = " "
+vvip_sisa, vip_sisa, reguler_sisa, ekonomi_sisa = 10, 15, 50, 5
+jumlah_pesanan = int(input("\nMasukkan jumlah tiket yang ingin dipesan: "))
+
+for i in range(1, jumlah_pesanan + 1):  
+    print(f"\nPemesanan ke-{i}:")
+    nama = input("Masukkan nama Anda: ")
+    
+    kursi_terpilih = False
+    while not kursi_terpilih:  
+        kursi = int(input("Masukkan nomor kursi yang ingin dipesan: "))
+        kursi_sudah_dipesan = False
+        
+        for j in range(1, total_kursi + 1):
+            if f"|{kursi}," in kursi_dipesan:
+                kursi_sudah_dipesan = True
+                break
+
+        if kursi_sudah_dipesan:
+            print("Maaf, kursi ini sudah dipesan. Silakan pilih kursi lain.")
+        else:
+            kategori, harga = "", 0
+            kursi_valid = False
+            
+            if kursi <= 10 and vvip_sisa > 0:
+                kategori, harga = "VVIP", harga_vvip
+                vvip_sisa -= 1
+                kursi_valid = True
+            elif kursi <= 25 and vip_sisa > 0:
+                kategori, harga = "VIP", harga_vip
+                vip_sisa -= 1
+                kursi_valid = True
+            elif kursi <= 75 and reguler_sisa > 0:
+                kategori, harga = "Reguler", harga_reguler
+                reguler_sisa -= 1
+                kursi_valid = True
+            else:
+                kategori, harga = "Ekonomi", harga_ekonomi
+                ekonomi_sisa -= 1
+                kursi_valid = True
+
+            if kursi_valid:
+                password = input("Buat password untuk akses konser: ")
+                kursi_dipesan += f"|{kursi},{nama},{kategori},{harga},{password}|\n"
+                kursi_terpilih = True  
+                
+                print("\n=== Struk Pemesanan Tiket ===")
+                print(f"Nama: {nama}")
+                print(f"Nomor Kursi: {kursi}")
+                print(f"Kategori: {kategori}")
+                print(f"Harga: Rp{harga:,}")
+                print(f"Password: {password}")
+            else:
+                print("Kategori yang Anda pilih sudah penuh. Silakan pilih kursi lain.")
+
+print("\nSisa kursi per kategori:")
+print(f"VVIP: {vvip_sisa}")
+print(f"VIP: {vip_sisa}")
+print(f"Reguler: {reguler_sisa}")
+print(f"Ekonomi: {ekonomi_sisa}")
+
+print("\nLayout Kursi Setelah Pemesanan:\n")
+nomor = 1
+for i in range(1, baris + 1):  
+    for j in range(1, kolom + 1):  
+        kursi_terpesan = False
+        
+        for k in range(1, total_kursi + 1):
+            if f"|{nomor}," in kursi_dipesan:
+                kursi_terpesan = True
+                break
+
+        if kursi_terpesan:
+            print(" 0", end=" ")
+        else:
+            print(f"{nomor:2}", end=" ")
+        nomor += 1
+    print()
+
+print("\nTerima kasih telah melakukan reservasi!")
