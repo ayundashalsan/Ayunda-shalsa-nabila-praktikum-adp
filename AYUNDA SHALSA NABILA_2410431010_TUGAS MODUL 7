@@ -1,0 +1,76 @@
+def input_praktikan():          # Fungsi untuk input data praktikan
+    nama = input("Nama: ")
+    nim = input("NIM: ")
+    pretest = float(input("Nilai Pretest: "))
+    postest = float(input("Nilai Postest: "))
+    tugas = float(input("Nilai Tugas: "))
+    bonus = float(input("Nilai Bonus: "))
+    return [nama, nim, pretest, postest, tugas, bonus]
+
+def hitung_nilai_akhir(data):   # Fungsi untuk menghitung nilai akhir praktikan
+    pretest = data[2]
+    postest = data[3]
+    tugas = data[4]
+    bonus = data[5]
+    nilai_akhir = (0.25 * pretest) + (0.25 * postest) + (0.5 * tugas) + bonus
+    return nilai_akhir
+
+def rata_rata(nilai_list):      # Fungsi untuk menghitung rata-rata 
+    total = 0
+    for nilai in nilai_list:
+        total = total + nilai
+    rata2 = total / len(nilai_list)
+    return rata2
+
+def tampilkan_tabel(data_list, rata_rata_akhir):   # Fungsi untuk menampilkan tabel data akhir
+    print("\nNama\t\tNIM\t\tNilai Akhir\tPeringkat")
+    print("-" * 55)
+    peringkat = 1
+    for i in range(len(data_list)):
+        nama = data_list[i][0]
+        nim = data_list[i][1]
+        nilai_akhir = data_list[i][6]
+        print(nama + "\t\t" + nim + "\t\t" + str(nilai_akhir) + "\t\t" + str(peringkat))
+        peringkat = peringkat + 1
+    print("-" * 55)
+    print("Rata-rata nilai akhir:", rata_rata_akhir)
+
+def proses_shift():             # Fungsi untuk memproses data praktikan
+    jumlah = int(input("Jumlah praktikan: "))
+    data_list = []
+
+    for i in range(jumlah): 
+        print("\nInput data praktikan ke-" + str(i+1))
+        data = input_praktikan()
+        nilai_akhir = hitung_nilai_akhir(data)
+        data.append(nilai_akhir)
+        data_list.append(data)
+
+    for i in range(len(data_list)):       # Urutkan data
+        for j in range(len(data_list)-1):
+            if data_list[j][6] < data_list[j+1][6]:
+                # Tukar posisi
+                sementara = data_list[j]
+                data_list[j] = data_list[j+1]
+                data_list[j+1] = sementara
+
+    pretest_list = []
+    postest_list = []
+    tugas_list = []
+    nilai_akhir_list = []
+
+    for i in range(len(data_list)):
+        pretest_list.append(data_list[i][2])
+        postest_list.append(data_list[i][3])
+        tugas_list.append(data_list[i][4])
+        nilai_akhir_list.append(data_list[i][6])
+
+    print("\nRata-rata Pretest:", rata_rata(pretest_list))
+    print("Rata-rata Postest:", rata_rata(postest_list))
+    print("Rata-rata Tugas:", rata_rata(tugas_list))
+
+    rata2_akhir = rata_rata(nilai_akhir_list)
+    tampilkan_tabel(data_list, rata2_akhir)
+
+# Panggil fungsi utama
+proses_shift()
