@@ -1,0 +1,165 @@
+# # import os
+# # import time
+# # from termcolor import cprint
+
+# # cprint("loading.....", color= "blue")
+# # time.sleep(3)
+# # os.system('cls')
+
+# # from termcolor import cprint
+# # cprint("selamat datang ayunda cantik", color="magenta")
+
+# # import time
+# # for i in range (1,6):
+# #     print(i)
+# #     time.sleep(2)
+
+# # import os
+# # os.system('cls')
+
+# # from termcolor import cprint
+# # def tulisanBerwarna(teks,warna):
+# #     cprint(teks, color=warna)
+# # tulisanBerwarna("ini warna hijau", "green")
+
+# # import os
+# # import time
+# # import random
+# # from termcolor import cprint
+
+# # warna_list = ['red', 'green', 'yellow', 'blue', 'magenta', 'cyan']
+# # teks = "PYTHON"
+
+# # for i in range(10):
+# #     os.system('cls' if os.name == 'nt' else 'clear')
+# #     print(" " * i, end="")  # spasi untuk pergeseran teks
+    
+# #     for huruf in teks:
+# #         cprint(huruf, random.choice(warna_list), end=" ")
+# #     print()
+    
+# #     time.sleep(0.3)
+
+# import random
+# from termcolor import cprint
+
+# warna_list = ['red', 'green', 'yellow', 'blue', 'magenta', 'cyan']
+# teks = "PYTHON"
+
+# for huruf in teks:
+#     i = random.randint(0, len(warna_list) - 1)
+#     cprint(huruf, warna_list[i], end=" ")
+# print()
+
+
+
+import os
+from termcolor import colored
+file_nama = "data_keuangan.txt"
+
+def pisah(teks):
+    hasil = []
+    sementara = ""
+    for c in teks:
+        if c == "|":
+            hasil.append(sementara)
+            sementara = ""
+        elif c != "\n":
+            sementara += c
+    hasil.append(sementara)
+    return hasil
+
+def muat():
+    catatan = []
+    if os.path.exists(file_nama):
+        with open(file_nama, "r") as f:
+            for baris in f:
+                bagian = pisah(baris)
+                if len(bagian) == 4:
+                    catatan.append({
+                        "tanggal": bagian[0],
+                        "keterangan": bagian[1],
+                        "jumlah": bagian[2],
+                        "tipe": bagian[3]
+                    })
+    return catatan
+
+def simpan(catatan):
+    with open(file_nama, "w") as f:
+        for c in catatan:
+            baris = (
+                c["tanggal"] + "|" +
+                c["keterangan"] + "|" +
+                c["jumlah"] + "|" +
+                c["tipe"] + "\n"
+            )
+            f.write(baris)
+
+def tampil(catatan):
+    if not catatan:
+        print(colored("Tidak ada data.", "red"))
+        return
+    no = 1
+    for c in catatan:
+        warna = "green" if c["tipe"] == "pemasukan" else "red"
+        print(colored(f"{no}.", "yellow"))
+        print(f"   Tanggal    : {c['tanggal']}")
+        print(f"   Keterangan : {c['keterangan']}")
+        print(f"   Jumlah    : {colored(c['jumlah'], warna)}")
+        print(f"   Tipe      : {colored(c['tipe'], warna)}")
+        print(colored("-" * 35, "magenta"))
+        no += 1
+
+def tambah(catatan):
+    t = input("Tanggal (YYYY-MM-DD): ")
+    k = input("Keterangan: ")
+    j = input("Jumlah uang: ")
+    tp = input("Tipe (pemasukan/pengeluaran): ") 
+    catatan.append({"tanggal": t, "keterangan": k, "jumlah": j, "tipe": tp})
+    simpan(catatan)
+    print(colored("Catatan ditambahkan.", "green"))
+
+def hapus(catatan):
+    if not catatan:
+        print(colored("Tidak ada data untuk dihapus.", "red"))
+        return
+    tampil(catatan)
+    pil = input("Masukkan nomor catatan yang ingin dihapus: ")
+    if not pil.isdigit():
+        print(colored("Input harus angka.", "red"))
+        return
+    n = int(pil)
+    if n < 1 or n > len(catatan):
+        print(colored("Nomor tidak valid.", "red"))
+        return
+    hitung = 1
+    for c in catatan[:]:
+        if hitung == n:
+            catatan.remove(c)
+            break
+        hitung += 1
+    simpan(catatan)
+    print(colored("Catatan dihapus.", "green"))
+
+def menu():
+    catatan = muat()
+    while True:
+        print("\nMenu:")
+        print("1. Tambah data")
+        print("2. Hapus data")
+        print("3. Tampilkan data")
+        print("4. Keluar")
+        pilih = input("Pilih (1-4): ")
+        if pilih == "1":
+            tambah(catatan)
+        elif pilih == "2":
+            hapus(catatan)
+        elif pilih == "3":
+            tampil(catatan)
+        elif pilih == "4":
+            print(colored("Sampai jumpa!", "yellow"))
+            break
+        else:
+            print(colored("Pilihan tidak valid.", "red"))
+
+menu()
