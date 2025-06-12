@@ -1,0 +1,39 @@
+from termcolor import colored
+
+tinggi_bendera = 12
+lebar_bendera = 25
+lebar_tiang = 4
+amplitudo = 3
+tinggi_tiang = 20  
+warna_tiang = "black"
+
+daftar_gelombang = [
+     0, 1, 2, 2, 3, 3, 2, 2, 1, 0,
+    -1, -2, -2, -3, -3, -2, -2, -1, 0
+]
+
+baris_bendera = [""] * tinggi_tiang
+
+# Bangun bendera kolom demi kolom
+for  kolom_ke in range(lebar_bendera):
+    pergeseran_vertikal = daftar_gelombang[ kolom_ke % len(daftar_gelombang)]  
+
+    kolom_baru= []
+    for baris_ke in range(tinggi_bendera):
+        warna = "red" if baris_ke < tinggi_bendera // 2 else "white"
+        kolom_baru.append(colored(" ", on_color="on_" + warna))
+
+    kolom_geser = [" "] * tinggi_tiang
+    for baris_ke in range(tinggi_bendera):
+        posisi_baris_akhir	 = baris_ke + pergeseran_vertikal
+        if 0 <= posisi_baris_akhir	 < tinggi_tiang:
+            kolom_geser[posisi_baris_akhir	] = kolom_baru[baris_ke]
+
+    for baris_ke in range(tinggi_tiang):
+        if  kolom_ke == 0:
+            baris_bendera[baris_ke] = colored(" " * lebar_tiang, on_color="on_" + warna_tiang)
+        baris_bendera[baris_ke] += kolom_geser[baris_ke]
+
+# Tampilkan hasil akhir
+for baris in baris_bendera:
+    print(baris)
